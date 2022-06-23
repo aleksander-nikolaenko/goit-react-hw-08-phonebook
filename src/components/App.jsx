@@ -2,13 +2,10 @@ import React, { lazy, Suspense } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { routesPaths } from 'routerSettings/routesPaths';
 import { ProtectedRoute } from 'utils/ProtectedRoute';
-
-// import Backdrop from '@mui/material/Backdrop';
-// import CircularProgress from '@mui/material/CircularProgress';
-
+import ResponsiveAppBar from './ResponsiveAppBar';
+import LoaderPage from './LoaderPage/LoaderPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ResponsiveAppBar from './ResponsiveAppBar';
 
 const HomePage = lazy(() =>
   import('../pages/HomePage' /* webpackChunkName: "home-page" */)
@@ -16,6 +13,9 @@ const HomePage = lazy(() =>
 
 const ContactsPage = lazy(() =>
   import('../pages/ContactsPage' /* webpackChunkName: "contacts-page" */)
+);
+const RegisterPage = lazy(() =>
+  import('../pages/RegisterPage' /* webpackChunkName: "register-page" */)
 );
 
 export const App = () => {
@@ -26,7 +26,7 @@ export const App = () => {
         <Route
           index
           element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<LoaderPage />}>
               <HomePage />
             </Suspense>
           }
@@ -34,7 +34,7 @@ export const App = () => {
         <Route
           path={routesPaths.homePage}
           element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<LoaderPage />}>
               <HomePage />
             </Suspense>
           }
@@ -47,12 +47,26 @@ export const App = () => {
               redirectPath={routesPaths.homePage}
               isAllowed={true}
             >
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<LoaderPage />}>
                 <ContactsPage />
               </Suspense>
             </ProtectedRoute>
           }
         />
+        <Route
+          path={routesPaths.registerPage}
+          element={
+            <ProtectedRoute
+              redirectPath={routesPaths.homePage}
+              isAllowed={true}
+            >
+              <Suspense fallback={<LoaderPage />}>
+                <RegisterPage />
+              </Suspense>
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="*" element={<Navigate to={routesPaths.homePage} />} />
       </Routes>
       <ToastContainer position="top-right" autoClose={1500} />
