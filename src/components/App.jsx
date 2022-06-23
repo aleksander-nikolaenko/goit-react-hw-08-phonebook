@@ -3,7 +3,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import { routesPaths } from 'routerSettings/routesPaths';
 import { ProtectedRoute } from 'utils/ProtectedRoute';
 import ResponsiveAppBar from './ResponsiveAppBar';
-import LoaderPage from './LoaderPage/LoaderPage';
+import LoaderPage from './LoaderPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -16,6 +16,10 @@ const ContactsPage = lazy(() =>
 );
 const RegisterPage = lazy(() =>
   import('../pages/RegisterPage' /* webpackChunkName: "register-page" */)
+);
+
+const LoginPage = lazy(() =>
+  import('../pages/LoginPage' /* webpackChunkName: "login-page" */)
 );
 
 export const App = () => {
@@ -66,7 +70,19 @@ export const App = () => {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path={routesPaths.loginPage}
+          element={
+            <ProtectedRoute
+              redirectPath={routesPaths.homePage}
+              isAllowed={true}
+            >
+              <Suspense fallback={<LoaderPage />}>
+                <LoginPage />
+              </Suspense>
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to={routesPaths.homePage} />} />
       </Routes>
       <ToastContainer position="top-right" autoClose={1500} />

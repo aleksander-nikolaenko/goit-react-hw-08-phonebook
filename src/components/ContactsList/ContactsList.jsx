@@ -1,8 +1,8 @@
 import { ContactsItem } from './ContactsItem';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContacts } from 'redux/slice/contacts';
-import { getContactsStatus, getFilteredContacts } from 'redux/slice/selectors';
+import { fetchContacts } from 'redux/slice/slice-contacts';
+import { getContactsStatus, getFilteredContacts } from 'redux/selectors';
 import { LoaderPage } from 'components/LoaderPage';
 import { toast } from 'react-toastify';
 

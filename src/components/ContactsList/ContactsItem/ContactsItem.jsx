@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import styles from './ContactsItem.module.css';
 import { useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/slice/contacts';
-import { getContactsStatus } from 'redux/slice/selectors';
+import { deleteContact } from 'redux/slice/slice-contacts';
+import { getContactsStatus } from 'redux/selectors';
 import { useSelector } from 'react-redux';
 import { LoaderButton } from 'components/LoaderButton';
 import { useState } from 'react';

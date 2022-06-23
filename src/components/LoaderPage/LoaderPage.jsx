@@ -1,19 +1,18 @@
-import * as React from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import { Audio } from 'react-loader-spinner';
 
-export default function LoaderPage() {
+import styles from './LoaderPage.module.css';
+
+const LoaderPage = () => {
   return (
-    <Box
-      sx={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <CircularProgress />
-    </Box>
+    <div className={styles.wrapper}>
+      <Audio
+        color="#1976d2"
+        height="80"
+        width="80"
+        ariaLabel="loading-indicator"
+      />
+    </div>
   );
-}
+};
+
+export default LoaderPage;

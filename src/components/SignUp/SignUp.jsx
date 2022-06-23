@@ -37,10 +37,6 @@ export default function SignUp() {
     });
   };
 
-  const handleMouseDownPassword = event => {
-    event.preventDefault();
-  };
-
   const handleSubmit = event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -112,7 +108,7 @@ export default function SignUp() {
                   value={values.password}
                   type={values.showPassword ? 'text' : 'password'}
                   label="Password"
-                  autoComplete="password"
+                  autoComplete="new-password"
                   onChange={handleChange}
                   InputProps={{
                     endAdornment: (
@@ -120,7 +116,6 @@ export default function SignUp() {
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
                           {values.showPassword ? (

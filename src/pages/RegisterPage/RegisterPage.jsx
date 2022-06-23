@@ -1,4 +1,4 @@
-const { default: SignUp } = require('components/SignUp');
+import SignUp from 'components/SignUp';
 
 const RegisterPage = () => {
   return <SignUp />;
