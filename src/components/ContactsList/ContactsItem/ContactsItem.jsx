@@ -1,12 +1,15 @@
 import PropTypes from 'prop-types';
 import styles from './ContactsItem.module.css';
 import { useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/slice/slice-contacts';
-import { getContactsStatus } from 'redux/selectors';
+import { deleteContact } from 'redux/operations/operations-contacts';
 import { useSelector } from 'react-redux';
 import { LoaderButton } from 'components/LoaderButton';
 import { useState } from 'react';
+import selectors from 'redux/selectors';
 import { toast } from 'react-toastify';
+
+const { getContactsStatus } = selectors;
+
 export const ContactsItem = props => {
   const { id, name, number } = props;
   const dispatch = useDispatch();

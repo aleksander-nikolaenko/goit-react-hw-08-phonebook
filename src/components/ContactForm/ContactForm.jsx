@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import { toast } from 'react-toastify';
-import { getContacts, getContactsStatus } from 'redux/selectors';
-import { addContact } from 'redux/slice/slice-contacts';
+import selectors from 'redux/selectors';
+import { addContact } from 'redux/operations/operations-contacts';
 import { useDispatch, useSelector } from 'react-redux';
 import { LoaderButton } from 'components/LoaderButton';
 
 import styles from './ContactForm.module.css';
+
+const { getContacts, getContactsStatus } = selectors;
 
 export const ContactForm = () => {
   const dispatch = useDispatch();

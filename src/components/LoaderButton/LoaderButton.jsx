@@ -10,7 +10,7 @@ export const LoaderButton = () => {
         height={24}
         width={24}
         strokeWidth={8}
-        color="black"
+        color="white"
         secondaryColor="white"
       />
     </div>

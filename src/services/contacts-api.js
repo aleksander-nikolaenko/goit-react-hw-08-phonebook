@@ -1,19 +1,51 @@
 import { http } from './api';
 
-const BASE_URL = 'https://62a88d28ec36bf40bda88928.mockapi.io/api/v1';
+const baseURL = 'https://connections-api.herokuapp.com';
 
-export const fetchContacts = () => {
-  return http.get(`${BASE_URL}/contacts`);
+export const registerUser = userData => {
+  return http.post(`${baseURL}/users/signup`, userData);
 };
 
-export const fetchContact = id => {
-  return http.get(`${BASE_URL}/contacts/${id}`);
+export const loginUser = data => {
+  return http.post(`${baseURL}/users/login`, data);
 };
 
-export const addContact = contact => {
-  return http.post(`${BASE_URL}/contacts/`, contact);
+export const currentUser = token => {
+  return http.get(`${baseURL}/users/current`, {
+    headers: {
+      Authorization: token,
+    },
+  });
 };
 
-export const deleteContact = id => {
-  return http.delete(`${BASE_URL}/contacts/${id}`);
+export const logoutUser = token => {
+  return http.post(`${baseURL}/users/logout`, null, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const fetchContacts = token => {
+  return http.get(`${baseURL}/contacts`, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const addContact = (contact, token) => {
+  return http.post(`${baseURL}/contacts/`, contact, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const deleteContact = (id, token) => {
+  return http.delete(`${baseURL}/contacts/${id}`, {
+    headers: {
+      Authorization: token,
+    },
+  });
 };

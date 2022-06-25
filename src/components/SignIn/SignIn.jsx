@@ -13,20 +13,38 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { routesPaths } from 'routerSettings/routesPaths';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from 'redux/operations/operations-user';
+import selectors from 'redux/selectors';
+import { LoaderButton } from 'components/LoaderButton';
+var CryptoJS = require('crypto-js');
 
 const theme = createTheme();
 
 export default function SignIn() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isLoading = useSelector(selectors.getIsLoading);
   const [values, setValues] = React.useState({
     email: '',
     password: '',
     checkedRemember: false,
   });
 
+  const [errors, setErrors] = React.useState({
+    email: '',
+    password: '',
+  });
+
   React.useEffect(() => {
     if (localStorage.getItem('savedUser')) {
-      const receivedData = JSON.parse(localStorage.getItem('savedUser'));
-      const { email, password, checkedRemember } = receivedData;
+      const receivedData = localStorage.getItem('savedUser');
+      const bytes = CryptoJS.AES.decrypt(receivedData, 'savedUser');
+      const decryptedData = JSON.parse(
+        JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+      );
+      const { email, password, checkedRemember } = decryptedData;
       setValues({
         ...values,
         email,
@@ -36,7 +54,20 @@ export default function SignIn() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  const validationField = (name, value) => {
+    if (!value) {
+      setErrors({
+        ...errors,
+        [name]: `${name} is required`,
+      });
+      return false;
+    }
+    setErrors({
+      ...errors,
+      [name]: ``,
+    });
+    return true;
+  };
   const handleChange = event => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
@@ -45,7 +76,7 @@ export default function SignIn() {
     setValues({ ...values, checkedRemember: event.target.checked });
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const userData = {
@@ -56,10 +87,25 @@ export default function SignIn() {
       ...userData,
       checkedRemember: values.checkedRemember,
     });
-    values.checkedRemember
-      ? localStorage.setItem('savedUser', savedData)
-      : localStorage.removeItem('savedUser');
-    console.log(userData);
+
+    if (
+      validationField('email', userData.email) &&
+      validationField('password', userData.password)
+    ) {
+      const text = CryptoJS.AES.encrypt(
+        JSON.stringify(savedData),
+        'savedUser'
+      ).toString();
+      values.checkedRemember
+        ? localStorage.setItem('savedUser', text)
+        : localStorage.removeItem('savedUser');
+      try {
+        await dispatch(loginUser(userData)).unwrap();
+        navigate(routesPaths.contactsPage);
+      } catch (error) {
+        console.warn(error);
+      }
+    }
   };
 
   return (
@@ -88,6 +134,8 @@ export default function SignIn() {
           >
             <TextField
               margin="normal"
+              error={!!errors.email}
+              helperText={errors.email}
               required
               fullWidth
               id="email"
@@ -100,6 +148,8 @@ export default function SignIn() {
             />
             <TextField
               margin="normal"
+              error={!!errors.password}
+              helperText={errors.password}
               required
               fullWidth
               id="password"
@@ -128,7 +178,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {isLoading ? <LoaderButton /> : 'Sign In'}
             </Button>
             <Grid container justifyContent="center">
               <Grid item>

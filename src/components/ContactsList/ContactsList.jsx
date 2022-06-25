@@ -1,12 +1,14 @@
 import { ContactsItem } from './ContactsItem';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContacts } from 'redux/slice/slice-contacts';
-import { getContactsStatus, getFilteredContacts } from 'redux/selectors';
-import { LoaderPage } from 'components/LoaderPage';
+import { fetchContacts } from 'redux/operations/operations-contacts';
+import selectors from 'redux/selectors';
+import LoaderPage from 'components/LoaderPage';
 import { toast } from 'react-toastify';
 
 import styles from './ContactsList.module.css';
+
+const { getContactsStatus, getFilteredContacts } = selectors;
 
 export const ContactsList = () => {
   const dispatch = useDispatch();

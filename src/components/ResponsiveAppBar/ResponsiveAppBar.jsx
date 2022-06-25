@@ -15,24 +15,31 @@ import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import { Link } from 'react-router-dom';
 import { routesPaths } from 'routerSettings/routesPaths';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import selectors from 'redux/selectors';
+import { logoutUser } from 'redux/operations/operations-user';
+import { toast } from 'react-toastify';
 
 const ResponsiveAppBar = () => {
+  const isAuth = useSelector(selectors.getIsAuth);
+  const userName = useSelector(selectors.getUserName);
+  const userEmail = useSelector(selectors.getUserEmail);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [login, setLogin] = React.useState(false);
   const [navigation, setNavigation] = React.useState([]);
   const [userMenu, setUserMenu] = React.useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    if (login) {
+    if (isAuth) {
       setNavigation(['Home', 'Contacts']);
       setUserMenu(['Your contacts', 'Logout']);
     } else {
       setNavigation(['Home', 'Register', 'Login']);
       setUserMenu(['Login']);
     }
-  }, [login]);
+  }, [isAuth]);
 
   const handleOpenNavMenu = event => {
     setAnchorElNav(event.currentTarget);
@@ -63,6 +70,7 @@ const ResponsiveAppBar = () => {
         break;
       case 'CONTACTS':
         navigate(routesPaths.contactsPage, { replace: true });
+
         break;
 
       default:
@@ -100,7 +108,15 @@ const ResponsiveAppBar = () => {
         navigate(routesPaths.loginPage, { replace: true });
         break;
       case 'Logout':
-        navigate(routesPaths.registerPage, { replace: true });
+        dispatch(logoutUser())
+          .unwrap()
+          .then(() => {
+            navigate(routesPaths.loginPage, { replace: true });
+          })
+          .catch(() => {
+            toast.error(`Error, try again`);
+          });
+
         break;
       case 'Your contacts':
         navigate(routesPaths.contactsPage, { replace: true });
@@ -111,13 +127,6 @@ const ResponsiveAppBar = () => {
     }
   };
 
-  const handleLoginUser = () => {
-    if (login) {
-      setLogin(false);
-    } else {
-      setLogin(true);
-    }
-  };
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -189,7 +198,7 @@ const ResponsiveAppBar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {login && (
+            {isAuth && (
               <Typography
                 component="p"
                 sx={{
@@ -198,7 +207,7 @@ const ResponsiveAppBar = () => {
                   mr: 1,
                 }}
               >
-                Hello, user
+                Hello, {userName}
               </Typography>
             )}
             <Tooltip title="Open user menu">
@@ -222,7 +231,7 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {login && (
+              {isAuth && (
                 <Typography
                   textAlign="center"
                   component="p"
@@ -231,7 +240,7 @@ const ResponsiveAppBar = () => {
                     mx: 2,
                   }}
                 >
-                  Hello, user
+                  {userEmail}
                 </Typography>
               )}
               {userMenu.map(setting => (
@@ -241,13 +250,6 @@ const ResponsiveAppBar = () => {
               ))}
             </Menu>
           </Box>
-          <Button
-            onClick={handleLoginUser}
-            sx={{ color: 'white', display: 'block' }}
-          >
-            {' '}
-            Login
-          </Button>
         </Toolbar>
       </Container>
     </AppBar>

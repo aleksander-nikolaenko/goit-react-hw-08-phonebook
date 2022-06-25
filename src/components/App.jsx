@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { routesPaths } from 'routerSettings/routesPaths';
 import { ProtectedRoute } from 'utils/ProtectedRoute';
@@ -6,6 +6,9 @@ import ResponsiveAppBar from './ResponsiveAppBar';
 import LoaderPage from './LoaderPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux';
+import selectors from 'redux/selectors';
+import { currentUser } from 'redux/operations/operations-user';
 
 const HomePage = lazy(() =>
   import('../pages/HomePage' /* webpackChunkName: "home-page" */)
@@ -23,6 +26,15 @@ const LoginPage = lazy(() =>
 );
 
 export const App = () => {
+  const isAuth = useSelector(selectors.getIsAuth);
+  const status = useSelector(selectors.getAuthStatus);
+  const dispatch = useDispatch();
+  console.log(status);
+
+  useEffect(() => {
+    dispatch(currentUser());
+  }, [dispatch]);
+
   return (
     <>
       <ResponsiveAppBar />
@@ -48,8 +60,8 @@ export const App = () => {
           path={routesPaths.contactsPage}
           element={
             <ProtectedRoute
-              redirectPath={routesPaths.homePage}
-              isAllowed={true}
+              redirectPath={routesPaths.loginPage}
+              isAllowed={isAuth}
             >
               <Suspense fallback={<LoaderPage />}>
                 <ContactsPage />
@@ -61,8 +73,8 @@ export const App = () => {
           path={routesPaths.registerPage}
           element={
             <ProtectedRoute
-              redirectPath={routesPaths.homePage}
-              isAllowed={true}
+              redirectPath={routesPaths.contactsPage}
+              isAllowed={!isAuth}
             >
               <Suspense fallback={<LoaderPage />}>
                 <RegisterPage />
@@ -74,8 +86,8 @@ export const App = () => {
           path={routesPaths.loginPage}
           element={
             <ProtectedRoute
-              redirectPath={routesPaths.homePage}
-              isAllowed={true}
+              redirectPath={routesPaths.contactsPage}
+              isAllowed={!isAuth}
             >
               <Suspense fallback={<LoaderPage />}>
                 <LoginPage />
@@ -85,6 +97,7 @@ export const App = () => {
         />
         <Route path="*" element={<Navigate to={routesPaths.homePage} />} />
       </Routes>
+
       <ToastContainer position="top-right" autoClose={1500} />
     </>
   );
