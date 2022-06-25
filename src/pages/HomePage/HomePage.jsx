@@ -46,6 +46,7 @@ export default function HomePage() {
             justifyContent="center"
           >
             <Button
+              sx={{ width: '120px' }}
               onClick={() =>
                 navigate(routesPaths.registerPage, { replace: true })
               }
@@ -54,6 +55,7 @@ export default function HomePage() {
               REGISTER
             </Button>
             <Button
+              sx={{ width: '120px' }}
               onClick={() => navigate(routesPaths.loginPage, { replace: true })}
               variant="outlined"
             >

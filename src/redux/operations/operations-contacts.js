@@ -14,8 +14,8 @@ export const addContact = createAsyncThunk(
   'contacts/addContacts',
   async (contact, thunkAPI) => {
     const persistedToken = thunkAPI.getState().auth.token;
-    const response = await contactsApi.addContact(contact, persistedToken);
-    return response.data;
+    await contactsApi.addContact(contact, persistedToken);
+    return contact;
   }
 );
 
@@ -23,7 +23,7 @@ export const deleteContact = createAsyncThunk(
   'contacts/deleteContacts',
   async (id, thunkAPI) => {
     const persistedToken = thunkAPI.getState().auth.token;
-    const response = await contactsApi.deleteContact(id, persistedToken);
-    return response.data;
+    await contactsApi.deleteContact(id, persistedToken);
+    return id;
   }
 );
