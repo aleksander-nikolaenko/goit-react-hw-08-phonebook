@@ -13,6 +13,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CircularProgress from '@mui/material/CircularProgress';
+import Link from '@mui/material/Link';
 
 import styles from './ContactsItem.module.css';
 
@@ -53,8 +54,15 @@ export const ContactsItem = props => {
           {name}
         </p>
         <p className={styles.number}>
-          <LocalPhoneIcon color="secondary" sx={{ mr: '8px' }} />
-          {number}
+          <Link
+            href={`tel:${number}`}
+            color="black"
+            underline="hover"
+            sx={{ display: 'flex' }}
+          >
+            <LocalPhoneIcon color="secondary" sx={{ mr: '8px' }} />
+            {number}
+          </Link>
         </p>
       </div>
       <IconButton
