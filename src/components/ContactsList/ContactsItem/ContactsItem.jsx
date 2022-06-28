@@ -1,12 +1,20 @@
 import PropTypes from 'prop-types';
-import styles from './ContactsItem.module.css';
 import { useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/operations/operations-contacts';
+import {
+  deleteContact,
+  fetchContacts,
+} from 'redux/operations/operations-contacts';
 import { useSelector } from 'react-redux';
-import { LoaderButton } from 'components/LoaderButton';
 import { useState } from 'react';
-import selectors from 'redux/selectors';
 import { toast } from 'react-toastify';
+import selectors from 'redux/selectors';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import PersonIcon from '@mui/icons-material/Person';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CircularProgress from '@mui/material/CircularProgress';
+
+import styles from './ContactsItem.module.css';
 
 const { getContactsStatus } = selectors;
 
@@ -15,12 +23,21 @@ export const ContactsItem = props => {
   const dispatch = useDispatch();
   const deleting = useSelector(getContactsStatus) === 'deleting';
   const [isDeleting, setDeleting] = useState(deleting);
+
   const handleDeleteContact = async id => {
     setDeleting(true);
     dispatch(deleteContact(id))
       .unwrap()
       .then(res => {
-        toast.success(`Contact "${res.name}" is deleting`);
+        toast.success(`Contact "${name}" is deleting`);
+        dispatch(fetchContacts())
+          .unwrap()
+          .then(() => {
+            toast.success(`Contacts updated`);
+          })
+          .catch(() => {
+            toast.error(`Contacts didn't updated`);
+          });
       })
       .catch(error => {
         setDeleting(false);
@@ -30,17 +47,28 @@ export const ContactsItem = props => {
   };
   return (
     <li className={styles.item}>
-      <button
-        className={styles.button}
-        type="Submit"
+      <div className={styles.wrapper}>
+        <p className={styles.text}>
+          <PersonIcon color="primary" sx={{ mr: '8px' }} />
+          {name}
+        </p>
+        <p className={styles.number}>
+          <LocalPhoneIcon color="secondary" sx={{ mr: '8px' }} />
+          {number}
+        </p>
+      </div>
+      <IconButton
+        aria-label="delete"
+        size="large"
+        color="error"
         onClick={() => handleDeleteContact(id)}
       >
-        {isDeleting ? <LoaderButton /> : <span>&#128503;</span>}
-      </button>
-      <div className={styles.wrapper}>
-        <p className={styles.text}>&#128447;&nbsp;&nbsp;{name}</p>
-        <p className={styles.number}>&#9742;&nbsp;&nbsp;{number}</p>
-      </div>
+        {isDeleting ? (
+          <CircularProgress size={24} color="error" />
+        ) : (
+          <DeleteIcon fontSize="inherit" />
+        )}
+      </IconButton>
     </li>
   );
 };

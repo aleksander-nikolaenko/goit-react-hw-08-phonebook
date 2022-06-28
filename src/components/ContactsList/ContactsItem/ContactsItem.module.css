@@ -2,19 +2,22 @@
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  justify-content: space-between;
 }
 
 .text {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  margin-left: 10px;
+  display: flex;
+  margin: 0;
+  font-size: 16px;
+  line-height: normal;
 }
 
 .number {
-  margin-top: 5px;
-  margin-bottom: 0px;
-  margin-left: 10px;
+  display: flex;
+  margin: 0;
   font-weight: bold;
+  font-size: 16px;
+  line-height: normal;
 }
 
 .button {
@@ -38,9 +41,7 @@
 }
 
 .wrapper {
-  width: 250px;
+  max-width: 360px;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
-  /* align-items: center; */
 }

@@ -16,9 +16,8 @@ export const fetchContacts = {
 };
 
 export const addContact = {
-  [operations.addContact.fulfilled]: (state, { payload }) => {
+  [operations.addContact.fulfilled]: state => {
     state.status = 'idle';
-    state.items.push(payload);
   },
   [operations.addContact.rejected]: (state, { error }) => {
     state.error = error;
@@ -30,9 +29,8 @@ export const addContact = {
 };
 
 export const deleteContact = {
-  [operations.deleteContact.fulfilled]: (state, { payload }) => {
+  [operations.deleteContact.fulfilled]: state => {
     state.status = 'idle';
-    state.items = state.items.filter(item => item.id !== payload.id);
   },
   [operations.deleteContact.rejected]: (state, { error }) => {
     state.error = error;

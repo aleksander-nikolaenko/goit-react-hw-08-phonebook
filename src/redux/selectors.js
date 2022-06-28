@@ -13,8 +13,10 @@ const getContacts = state => state.contacts.items;
 const getFilteredContacts = createSelector(
   [getContacts, getFilterValue],
   (contacts, filter) => {
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase().trim())
+    return contacts.filter(
+      contact =>
+        contact.name.toLowerCase().includes(filter.toLowerCase().trim()) ||
+        contact.number.includes(filter.toLowerCase().trim())
     );
   }
 );
