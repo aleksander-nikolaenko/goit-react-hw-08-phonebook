@@ -27,9 +27,7 @@ const LoginPage = lazy(() =>
 
 export const App = () => {
   const isAuth = useSelector(selectors.getIsAuth);
-  const status = useSelector(selectors.getAuthStatus);
   const dispatch = useDispatch();
-  console.log(status);
 
   useEffect(() => {
     dispatch(currentUser());
