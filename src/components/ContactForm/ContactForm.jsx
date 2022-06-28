@@ -19,8 +19,9 @@ import { LoaderButton } from 'components/LoaderButton';
 
 const { getContacts, getContactsStatus } = selectors;
 
-const NAME_REGEX = /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
-// /^(?=.{2,25}$)(?![' -])(?!.*[ '-]{2})[a-zA-Zа-яА-Я' -]+(?<![' -])$/;
+const NAME_REGEX =
+  /^(?=.{2,25}$)(?![' -])(?!.*[ '-]{2})[a-zA-Zа-яА-Я' -]+(?<![' -])$/;
+// /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
 const NUMBER_REGEX = /^\+?[0-9]?[0-9]?([0-9]{10})$/;
 // /^\+?([0-9]{2})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
